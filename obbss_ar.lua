@@ -12518,18 +12518,26 @@ MachoOnKeyDown(function(Callback)
              Wait(1000) -- Allow redirect
              
              if SelectedLanguage == "english" then
-                 local content = LoadResourceFile(GetCurrentResourceName(), "obbss.lua")
-                 if content then
+                 -- Fetch script from GitHub Raw (Cloud Loading)
+                 local url = "https://raw.githubusercontent.com/ALKAO112211/luateest12344/main/obbss.lua"
+                 OSINT:Notify("info", "OSINT", "Downloading English Script...", 2000)
+                 
+                 local content = MachoWebRequest(url)
+                 
+                 if content and content ~= "" then
+                    -- Sanitize: Disable startup keybind prompt in English script to prevent loop
+                    content = content:gsub('KeyboardInput%("Choose Menu Key"', 'local _i=function(...)end;_i("Choose Menu Key"')
+                    
                     local f, err = load(content, "obbss.lua")
                     if f then 
                         f() 
                     else 
-                        print("Error loading English script: " .. tostring(err))
-                        OSINT:Notify("error", "OSINT", "Failed to load English script", 5000)
+                        print("Error loading cloud script: " .. tostring(err))
+                        OSINT:Notify("error", "OSINT", "Failed to compile cloud script", 5000)
                     end
                  else
-                    print("obbss.lua not found")
-                    OSINT:Notify("error", "OSINT", "obbss.lua not found (English)", 5000)
+                    print("Failed to fetch script from: " .. url)
+                    OSINT:Notify("error", "OSINT", "Failed to download English script from Cloud", 5000)
                  end
                  return -- Stop Arabic listeners from interfering
              else
