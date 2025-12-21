@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AyS - المنيو الذكي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1410 0%, #2d1f15 50%, #1a1410 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 90, 43, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.1);
+                opacity: 0.7;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #8b5a2b 0%, #d4a574 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px rgba(139, 90, 43, 0.6),
+                0 0 100px rgba(139, 90, 43, 0.3),
+                inset 0 0 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 50px rgba(139, 90, 43, 0.6), 0 0 100px rgba(139, 90, 43, 0.3), inset 0 0 30px rgba(0, 0, 0, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 70px rgba(139, 90, 43, 0.8), 0 0 120px rgba(139, 90, 43, 0.5), inset 0 0 30px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .logo h1 {
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+            letter-spacing: 5px;
+        }
+
+        .subtitle {
+            color: #d4a574;
+            font-size: 18px;
+            margin-top: 10px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .menus {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .menu-card {
+            background: rgba(45, 31, 21, 0.6);
+            border: 2px solid #8b5a2b;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease;
+            width: 350px;
+            cursor: pointer;
+        }
+
+        .menu-card.selected {
+            border-color: #d4a574;
+            box-shadow: 0 15px 60px rgba(139, 90, 43, 0.6);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(212, 165, 116, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .menu-card:hover::before {
+            left: 100%;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            border-color: #d4a574;
+            box-shadow: 0 15px 60px rgba(139, 90, 43, 0.4);
+        }
+
+        .menu-preview {
+            width: 100%;
+            height: 320px;
+            background: rgba(139, 90, 43, 0.2);
+            border: 1px solid #8b5a2b;
+            background-size: contain;
+            /* جعل الصورة كاملة دون قص */
+            background-position: center;
+            /* وضع الصورة في الوسط */
+            background-repeat: no-repeat;
+            /* منع تكرار الصورة */
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 72px;
+            color: #8b5a2b;
+            text-shadow: 0 0 20px rgba(139, 90, 43, 0.5);
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+
+        }
+
+        .menu-preview.no-image {
+            font-size: 72px;
+        }
+
+        .menu-title {
+            color: #d4a574;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .menu-description {
+            color: #b8956a;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #8b5a2b 0%, #d4a574 100%);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(139, 90, 43, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(139, 90, 43, 0.6);
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            animation: fadeIn 2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            color: #d4a574;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+        }
+
+        .footer-link:hover {
+            color: #fff;
+            border-color: #8b5a2b;
+            background: rgba(139, 90, 43, 0.2);
+        }
+
+        .copyright {
+            color: #8b5a2b;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .logo h1 {
+                font-size: 36px;
+            }
+
+            .menus {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .menu-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+
+
+        .logo img.logo-img {
+            width: 150px;
+            /* نفس حجم الدائرة الحالي */
+            height: 150px;
+            border-radius: 50%;
+            /* إذا تريد الشكل الدائري */
+            object-fit: cover;
+            /* لضمان ملء العنصر بدون تشويه */
+            box-shadow: 0 0 50px rgba(139, 90, 43, 0.6),
+                0 0 100px rgba(139, 90, 43, 0.3),
+                inset 0 0 30px rgba(0, 0, 0, 0.3);
+            /* نفس تأثير التوهج */
+            animation: glow 3s ease-in-out infinite;
+            /* تحافظ على الحركة الحالية */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://cdn.discordapp.com/attachments/1450896246616232130/1452068653997752548/standard.gif?ex=694877d1&is=69472651&hm=ecfd26ce9146f5e68136f164cac0cee32ef885ca7e4b332ec0917804ad75d11b&"
+                    alt="AyS Logo" class="logo-img">
+            </div>
+
+            <p class="subtitle">اختر المنيو المناسب لك</p>
+        </div>
+
+        <div class="menus">
+            <div class="menu-card selected" id="menu-arabic" onclick="selectMenu('arabic')">
+                <div class="menu-preview no-image">🌙</div>
+                <h2 class="menu-title">المنيو العربي</h2>
+                <p class="menu-description">النسخة العربية بالكامل من المنيو سهلة الفهم.</p>
+                <button class="btn" onclick="activateMenu('arabic'); event.stopPropagation();">
+                    <span>▶ تشغيل</span>
+                </button>
+            </div>
+
+            <div class="menu-card" id="menu-english" onclick="selectMenu('english')">
+                <div class="menu-preview no-image"></div>
+                <h2 class="menu-title">المنيو الإنجليزي</h2>
+                <p class="menu-description">عيش تجربة هاك فاخر بلغه النقليزيه.</p>
+                <button class="btn" onclick="activateMenu('english'); event.stopPropagation();">
+                    <span>▶ تشغيل</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-links">
+                <a href="#" class="footer-link">للاختيار ⏎ Enter</a>
+                <a href="#" class="footer-link">للتنقل ← →</a>
+                <a href="#" class="footer-link">استخدم ← →</a>
+            </div>
+            <p class="copyright">© 2024 AyS - جميع الحقوق محفوظة</p>
+        </div>
+    </div>
+
+    <script>
+        let selectedMenu = 'arabic'; // البداية على المنيو العربي
+
+        // Listen for messages from Lua
+        window.addEventListener('message', function (event) {
+            const data = event.data;
+
+            if (data.action === 'setSelection') {
+                selectMenu(data.selection);
+            } else if (data.action === 'activate') {
+                activateMenu(data.selection);
+            }
+        });
+
+        // Keydown listener fallback (or valid if NUI focus is used)
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') {
+                selectMenu('arabic');
+            } else if (e.key === 'ArrowLeft') {
+                selectMenu('english');
+            } else if (e.key === 'Enter') {
+                activateMenu(selectedMenu);
+            }
+        });
+
+        function selectMenu(menu) {
+            selectedMenu = menu;
+
+            // إزالة التحديد من جميع المنيوهات
+            document.querySelectorAll('.menu-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // إضافة التحديد للمنيو المختار
+            const card = document.getElementById('menu-' + menu);
+            if (card) card.classList.add('selected');
+        }
+
+        function activateMenu(menu) {
+            if (menu === 'english') {
+                window.location.href = 'index.html';
+            } else {
+                window.location.href = 'asstarb/index_ar.html';
+            }
+        }
+
+        // لتغيير الصور - استخدم هذه الدالة
+        function setMenuImage(menuId, imageUrl) {
+            const preview = document.querySelector('#menu-' + menuId + ' .menu-preview');
+            preview.style.backgroundImage = `url('${imageUrl}')`;
+            preview.classList.remove('no-image');
+            preview.innerHTML = ''; // إزالة الإيموجي
+        }
+
+
+        setMenuImage('arabic', 'https://cdn.discordapp.com/attachments/1450896246616232130/1452090017492238488/image.png?ex=69488bb6&is=69473a36&hm=bd3b8f9a76fe1c42b14f147864bf87b2b1da605426fb0170f656d8488bcf72b8&');
+        setMenuImage('english', 'https://cdn.discordapp.com/attachments/1450896246616232130/1452065965087920249/-039c9520-cbbf-4016-8695-bc0123124841.png?ex=69487550&is=694723d0&hm=3837103e29804ebcf2d9d38d25c35366aa5919ea7eea83ed8bc4b2a8a1ddd50a&');
+
+        // مثال على كيفية إضافة الصور:
+        // setMenuImage('english', 'رابط_الصورة_للمنيو_الإنجليزي');
+        // setMenuImage('arabic', 'رابط_الصورة_للمنيو_العربي');
+    </script>
+</body>
+
+</html>
