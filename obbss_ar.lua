@@ -9952,12 +9952,12 @@ end
 
 CreateThread(function()
     OSINT:Initialize()
-    OSINT:BuildDefaultMenu()
-    OSINT:UpdateElements(CurrentMenu)
+    -- OSINT:BuildDefaultMenu()
+    -- OSINT:UpdateElements(CurrentMenu)
     Wait(1000)
-    OSINT:Notify("success", "OSINT", "تم تحميل OSINT Bypass، أهلاً بك!", 3000)
+    -- OSINT:Notify("success", "OSINT", "تم تحميل OSINT Bypass، أهلاً بك!", 3000)
     Wait(1000)
-    OSINT:Notify("info", "OSINT", "مفتاحك لن ينتهي أبداً، شكراً لاستخدامك OSINT Bypass!", 3000)
+    -- OSINT:Notify("info", "OSINT", "مفتاحك لن ينتهي أبداً، شكراً لاستخدامك OSINT Bypass!", 3000)
     Wait(1000)
 
     -- AddTrigger({ type = "button", label = "Example Trigger",
@@ -10940,16 +10940,16 @@ if GetResourceState("spoodyFraud") == 'started' then
     })
 end
 
-    KeyboardInput("Choose Menu Key", "", function(val)
-        for vk, name in pairs(MappedKeys) do
-            if name:lower() == val:lower() then
-                MenuKey = name
-                Wait(250)
-                OSINT:ShowUI()
-                return
-            end
-        end
-    end, "keybind")
+    -- KeyboardInput("Choose Menu Key", "", function(val)
+    --     for vk, name in pairs(MappedKeys) do
+    --         if name:lower() == val:lower() then
+    --             MenuKey = name
+    --             Wait(250)
+    --             OSINT:ShowUI()
+    --             return
+    --         end
+    --     end
+    -- end, "keybind")
 
     local lastSliderPress = 0
     local sliderDelay = 120
@@ -12516,8 +12516,41 @@ MachoOnKeyDown(function(Callback)
         elseif keyName == "Enter" then
              OSINT:SendMessage({action = 'activate', selection = SelectedLanguage})
              Wait(1000) -- Allow redirect
-             LanguageSelected = true
-             OSINT:ShowUI() -- Open menu
+             
+             if SelectedLanguage == "english" then
+                 local content = LoadResourceFile(GetCurrentResourceName(), "obbss.lua")
+                 if content then
+                    local f, err = load(content, "obbss.lua")
+                    if f then 
+                        f() 
+                    else 
+                        print("Error loading English script: " .. tostring(err))
+                        OSINT:Notify("error", "OSINT", "Failed to load English script", 5000)
+                    end
+                 else
+                    print("obbss.lua not found")
+                    OSINT:Notify("error", "OSINT", "obbss.lua not found (English)", 5000)
+                 end
+                 return -- Stop Arabic listeners from interfering
+             else
+                 LanguageSelected = true
+                 OSINT:BuildDefaultMenu()
+                 OSINT:UpdateElements(CurrentMenu)
+                 -- Trigger the keybind prompt now
+                 KeyboardInput("اختر مفتاح القائمة", "", function(val)
+                     for vk, name in pairs(MappedKeys) do
+                         if name:lower() == val:lower() then
+                             MenuKey = name
+                             Wait(250)
+                             OSINT:ShowUI()
+                             return
+                         end
+                     end
+                 end, "keybind")
+                 OSINT:Notify("success", "OSINT", "تم تحميل OSINT Bypass، أهلاً بك!", 3000)
+                 
+                 -- We do NOT call ShowUI here because the prompt will handle it, or user opens with key
+             end
         end
         return
     end
