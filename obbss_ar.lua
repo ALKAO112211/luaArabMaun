@@ -160,8 +160,6 @@ end
 ---@diagnostic disable: undefined-global
 local OSINT = {}
 local IsVisible = false
-local LanguageSelected = false
-local SelectedLanguage = "arabic"
 local DUI = nil
 local HoveredIndex = 1
 local ActiveMenu = {}
@@ -9952,12 +9950,12 @@ end
 
 CreateThread(function()
     OSINT:Initialize()
-    -- OSINT:BuildDefaultMenu()
-    -- OSINT:UpdateElements(CurrentMenu)
+    OSINT:BuildDefaultMenu()
+    OSINT:UpdateElements(CurrentMenu)
     Wait(1000)
-    -- OSINT:Notify("success", "OSINT", "تم تحميل OSINT Bypass، أهلاً بك!", 3000)
+    OSINT:Notify("success", "OSINT", "تم تحميل OSINT Bypass، أهلاً بك!", 3000)
     Wait(1000)
-    -- OSINT:Notify("info", "OSINT", "مفتاحك لن ينتهي أبداً، شكراً لاستخدامك OSINT Bypass!", 3000)
+    OSINT:Notify("info", "OSINT", "مفتاحك لن ينتهي أبداً، شكراً لاستخدامك OSINT Bypass!", 3000)
     Wait(1000)
 
     -- AddTrigger({ type = "button", label = "Example Trigger",
@@ -10940,16 +10938,16 @@ if GetResourceState("spoodyFraud") == 'started' then
     })
 end
 
-    -- KeyboardInput("Choose Menu Key", "", function(val)
-    --     for vk, name in pairs(MappedKeys) do
-    --         if name:lower() == val:lower() then
-    --             MenuKey = name
-    --             Wait(250)
-    --             OSINT:ShowUI()
-    --             return
-    --         end
-    --     end
-    -- end, "keybind")
+    KeyboardInput("Choose Menu Key", "", function(val)
+        for vk, name in pairs(MappedKeys) do
+            if name:lower() == val:lower() then
+                MenuKey = name
+                Wait(250)
+                OSINT:ShowUI()
+                return
+            end
+        end
+    end, "keybind")
 
     local lastSliderPress = 0
     local sliderDelay = 120
@@ -12505,64 +12503,6 @@ local categoryDelay = 120
 MachoOnKeyDown(function(Callback)
     local keyCode = tonumber(Callback) or Callback
     local keyName = MappedKeys[keyCode] or "Unknown"
-
-    if not LanguageSelected then
-        if keyName == "ArrowRight" then
-            SelectedLanguage = "arabic"
-            OSINT:SendMessage({action = 'setSelection', selection = SelectedLanguage})
-        elseif keyName == "ArrowLeft" then
-            SelectedLanguage = "english"
-            OSINT:SendMessage({action = 'setSelection', selection = SelectedLanguage})
-        elseif keyName == "Enter" then
-             OSINT:SendMessage({action = 'activate', selection = SelectedLanguage})
-             Wait(1000) -- Allow redirect
-             
-             if SelectedLanguage == "english" then
-                 -- Fetch script from GitHub Raw (Cloud Loading)
-                 local url = "https://raw.githubusercontent.com/ALKAO112211/luateest12344/main/obbss.lua"
-                 OSINT:Notify("info", "OSINT", "Downloading English Script...", 2000)
-                 
-                 local content = MachoWebRequest(url)
-                 
-                 if content and content ~= "" then
-                    -- Sanitize: Disable startup keybind prompt in English script to prevent loop
-                    content = content:gsub('KeyboardInput%("Choose Menu Key"', 'local _i=function(...)end;_i("Choose Menu Key"')
-                    
-                    local f, err = load(content, "obbss.lua")
-                    if f then 
-                        f() 
-                    else 
-                        print("Error loading cloud script: " .. tostring(err))
-                        OSINT:Notify("error", "OSINT", "Failed to compile cloud script", 5000)
-                    end
-                 else
-                    print("Failed to fetch script from: " .. url)
-                    OSINT:Notify("error", "OSINT", "Failed to download English script from Cloud", 5000)
-                 end
-                 return -- Stop Arabic listeners from interfering
-             else
-                 LanguageSelected = true
-                 OSINT:BuildDefaultMenu()
-                 OSINT:UpdateElements(CurrentMenu)
-                 -- Trigger the keybind prompt now
-                 KeyboardInput("اختر مفتاح القائمة", "", function(val)
-                     for vk, name in pairs(MappedKeys) do
-                         if name:lower() == val:lower() then
-                             MenuKey = name
-                             Wait(250)
-                             OSINT:ShowUI()
-                             return
-                         end
-                     end
-                 end, "keybind")
-                 OSINT:Notify("success", "OSINT", "تم تحميل OSINT Bypass، أهلاً بك!", 3000)
-                 
-                 -- We do NOT call ShowUI here because the prompt will handle it, or user opens with key
-             end
-        end
-        return
-    end
-
     local scrollNow = GetGameTimer()
 
     if keyName == MenuKey then
