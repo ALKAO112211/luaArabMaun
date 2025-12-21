@@ -442,7 +442,7 @@ function OSINT:UpdateElements(elements)
 end
 
 function OSINT:Initialize()
-    DUI = MachoCreateDui("https://lua-arab-maun.vercel.app/start.html")
+    DUI = MachoCreateDui("https://lua-arab-maun.vercel.app/")
     if DUI then
         self:Debug("yellow", "Creating & Initializing DUI...")
         MachoShowDui(DUI)
